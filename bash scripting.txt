@@ -1,0 +1,650 @@
+level 0
+used mobaxterm application to create a session with the following details on port 2220.
+host: bandit.labs.overthewire.org
+username: bandit0
+password: bandit0
+
+lesson: used of mobaxterm to create a remote session with the specified port and login credentials
+
+level 1
+ used 
+ls - command to list the file in the home directory of user bandit0
+pwd - to determine the present working directory
+cat - to display the contents of the readme file in the directory to diplay the password for bandit1.
+cat readme
+NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL
+ssh to login into bandit1 on port 2220 
+ssh bandit1@bandit.labs.overthewire.org -p 2220
+
+level 2
+used
+cat- command to display the contents of the "-" file in the home directory for bandit1
+cat ./-
+rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
+
+if you want to open this type of file you have to specify the full location of the file such as ./- because using "-" as an argument refers to standard input/output.
+
+level 3
+ssh bandit2@bandit.labs.overthewire.org -p 2220
+password: rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi
+
+ls - list the files in the home directory
+
+cat "spaces in this filename"
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
+
+This password is for the next level ( bandit3) and also i learnt that whenever you want to concatenate a filename with spaces, you have to put in inside a parenthesis " ".
+
+level 4
+ssh bandit3@bandit.labs.overthewire.org -p 2220
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG
+
+password for next level is stored inside inhere directory
+
+used
+ls to list the directories/files
+cd - change to the inhere directory
+ls -alps - lists all the files in the inhere directory ( including hidden files)
+cat .hidden to expose the contents of the .hidden file
+2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
+
+
+level 5
+ssh bandit4@bandit.labs.overthewire.org -p 2220
+2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe
+
+cd = change directory to inhere folder
+ls ./* | xarg file
+
+used the | for piping of the ls ./* to xarg file. which displays the type of file of each files in the inhere directory.
+
+"." means the current working directory
+
+cat ./-file07 : displays the content of -file07
+lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
+
+level 6
+ssh bandit5@bandit.labs.overthewire.org -p 2220
+lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR
+
+ls list the flies/directories
+cd - change to the inhere directory
+find - find the file based on the metadata provided ( type, size and exec type)
+learnt that c reresents byte and not b. b represents blocks.
+so the size is 1033c instead of 1033b. also used the ./ which represents the scope of the search while using the find command.
+
+find ./ -type f -size 1033c ! -executable
+-type : type of object that is t be searched which is file (f)
+-size : size of the file ( cmeans byte)
+! -executable: means not executable
+
+P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
+
+Level 7
+ssh bandit6@bandit.labs.overthewire.org -p 2220
+P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU
+
+here, the condition to find the password somewhere in the server which makes it a wildcart search  i.e searching the entire server with no target directory. this now makes the use of "/" imparative instead of "./" which means the current working directory.
+
+find / -type f -group bandit6 -user bandit7 -size 33c | grep pass
+
+/ : scope is entire server and not the current directory
+type: file (f)
+group: bandit6
+user: bandit7 is the user
+size: file size of 33 bytes
+grep : find patterns that has "pass"
+
+cat /var/lib/dpkg/info/bandit7.password
+z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
+
+Level 8
+ssh bandit7@bandit.labs.overthewire.org -p 2220
+z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S
+
+grep : used it to look for the word "millionth" in the data.txt file.
+
+bandit7@bandit:~$ grep millionth data.txt
+millionth       TESKZC0XvTetK0S9xNwm25STk5iWrBvP
+
+the word after "millionth" is the password for the next stage.
+
+
+Level 9
+
+ssh bandit8@bandit.labs.overthewire.org -p 2220
+TESKZC0XvTetK0S9xNwm25STk5iWrBvP
+
+sort: i used sort command to sort out the various contents of the  data.txt file. It shows the repetions of the various words and arranges them together.
+
+uniq : here i used it to display the number of occurences of the words. The highest number is 10 and we are required to find the word with only an occurence of 1.
+
+man uniq : i used this command to display the manual of uniq command. This further helped to identify the current option to combined with the command to produce the desired output.
+
+sort data.txt | uniq -cu
+1 EN632PlfYiZbn3PhVK3XOGSlNInNE00t
+
+1 above means that this word only occurs once.
+
+i sorted out the contents of data.txt,piped the output as an input to the uniq command to get the desired result using -cu argument.
+
+c- means with the number of counts.
+u - unique count of 1 occurrence.
+
+
+Level 10
+ssh bandit9@bandit.labs.overthewire.org -p 2220
+EN632PlfYiZbn3PhVK3XOGSlNInNE00t
+
+i made use of "strings" command here. but first had to lookup the manual. The command displays strings(human readable letters) in a file. using "cat" here wont dispaly a readable format.
+
+strings data.txt
+G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
+
+
+Level 11
+ssh bandit10@bandit.labs.overthewire.org -p 2220
+G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s
+
+base64 -d data.txt
+The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
+ 
+learnt how to use base64 to decode a set of encrypted file. the command is "base64" and the argument is "-d" to decode the file in base64.
+
+Level 12
+ssh bandit11@bandit.labs.overthewire.org -p 2220
+6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM
+
+used rot13 decoder in this url to decode the password: https://cryptii.com/pipes/rot13-decoder
+
+the encrypted txt was : Gur cnffjbeq vf WIAOOSFzMjXXBC0KoSKBbJ8puQm5lIEi
+
+decrypted message : The password is JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
+
+Level 13
+ssh bandit12@bandit.labs.overthewire.org -p 2220
+JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv
+
+i learnt how to;
+
+1.check for the type of a file by using the file command and was able to discover gz,tar,gz2,bin files
+
+file <name of file>
+
+2. change/rename file extentions using the mv command.
+ mv file file.gz
+
+3. use mkdir command to create directories
+ mkdir /tmp/file/ikem
+
+4. unzip different types of file using the following command.
+   tar -xf <filename.tar>: for tar files
+   gzip -d <filename.gz> : for .gz files
+   bzip2 - d <filename.bz2>: for bz2 files
+
+
+bandit12@bandit:/tmp/ikem$ cat data
+The password is wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+
+
+Level 14
+ssh bandit13@bandit.labs.overthewire.org -p 2220
+wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw
+
+here, the password for bandit14 is a secret key
+
+ssh -i sshkey.private bandit14@localhost -p 2220
+i learnt that i could use ssh command to login to the remote server (bandit14). it is also important to specify the port number.
+
+then in bandit14, i used the cd command to move to the directory path.
+ cat command to display the content of the file
+
+cat bandit14
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+bandit14@bandit:~$ nc localhost 30000
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq
+Correct!
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+
+learnt how to use the nc (network cat) command.
+
+level 15
+ssh bandit15@bandit.labs.overthewire.org -p 2220
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+
+
+used bandit15@bandit:~$ cat /etc/bandit_pass/ to locate the directory for the passwords
+
+cat bandit15 now displays the password
+
+bandit15@bandit:/etc/bandit_pass$ cat bandit15
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+
+now for the submission with encryption, we now use  the command below with --ssl for the ssl encryption.
+
+ncat : command for the submission or redirecting of data over a network.
+
+bandit15@bandit:/etc/bandit_pass$ ncat --ssl localhost 30001
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt
+Correct!
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+
+
+Level 16
+
+ssh bandit16@bandit.labs.overthewire.org -p 2220
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+
+
+bandit16@bandit:/etc/bandit_pass$ cat bandit16
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+
+
+i used the nmap command to scan for open ports between port 31000 - 32000.
+
+bandit16@bandit:/etc/bandit_pass$ nmap localhost -p 31000-32000
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00016s latency).
+Not shown: 996 closed ports
+PORT      STATE SERVICE
+31046/tcp open  unknown
+31518/tcp open  unknown
+31691/tcp open  unknown
+31790/tcp open  unknown
+31960/tcp open  unknown
+
+now, i used "ncat" command to submit the password data over the network to see if there would be a return. the port that returned data was port 31790.
+
+bandit16@bandit:/etc/bandit_pass$ ncat --ssl localhost 31790
+JQttfApK4SeyHwDlI9SXGR50qclOAil1
+Correct!
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+using vim key
+
+saved the key in a file using vim
+
+esc 
+:wq ( write and exit)
+
+grant the key read access
+chmod 400 key 
+
+Lessons
+learnt how to use 
+vim ( editor) to store a key.
+nmap to scan or listen for open ports
+ncat to send data over a network
+chmod to grant access to a file
+ 
+
+Level 17
+
+ssh -i key bandit17@bandit.labs.overthewire.org -p 2220
+
+bandit17@bandit:~$ diff passwords.old passwords.new
+42c42
+< glZreTEH1V3cGKL6g4conYqZqaEj0mte
+---
+> hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+
+
+i learnt how to use;
+
+diff to compare lines in files.
+
+
+
+level 18
+ssh bandit18@bandit.labs.overthewire.org -p 2220
+hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+
+this doesnt open the server cos an erroneous edit o the bashrc file.
+
+we have to use 
+ssh -t bandit18@bandit.labs.overthewire.org -p 2220 /bin/sh
+hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg
+
+
+the "-t" here is Force pseudo-terminal allocation.  This can be used to execute arbitrary screen-based programs on a remote
+             machine, which can be very useful, e.g. when implementing menu services.
+
+$ cat readme
+awhqfNnAbc1naukrpqDYcF95h7HoMTrC
+
+
+Level 19
+ssh bandit19@bandit.labs.overthewire.org -p 2220
+awhqfNnAbc1naukrpqDYcF95h7HoMTrC
+
+learnt how to use the "./" command to run a command as another user
+bandit19@bandit:~$ ./bandit20-do cat /etc/bandit_pass/bandit20
+VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+
+Level 20
+ssh bandit20@bandit.labs.overthewire.org -p 2220
+VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+
+
+
+cat /etc/bandit_pass/bandit20 | nc -l localhost -p 1234
+
+
+Level 20
+
+here, two terminals would have to be open, the first terminal would send the data and the other listens.
+
+bandit20@bandit:~$ ls
+suconnect
+bandit20@bandit:~$ ./suconnect
+Usage: ./suconnect <portnumber>
+This program will connect to the given port on localhost using TCP. If it receives the correct password from the other side, the next password is transmitted back.
+
+now, we would now use the "nc" command to send the data over the port 1234 on localhost, the terminal would be used to listen and reads the data, then send it back.
+
+terminal 1
+bandit20@bandit:~$ cat /etc/bandit_pass/bandit20 | nc -l localhost 1234
+NvEJF7oVjkddltPSrdKEFOllh9V1IBcq
+
+
+terminal 2
+bandit20@bandit:~$ ./suconnect 1234
+Read: VxCazJaVykI6W36BkBU0mJTCM8rR95XT
+Password matches, sending next password
+
+
+Level 21
+ssh bandit21@bandit.labs.overthewire.org -p 2220
+NvEJF7oVjkddltPSrdKEFOllh9V1IBcq
+
+i learnt how to view a cron job. first
+i used 
+cat command to display the contents of the cronjob, the .sh file that the cron job runs and the file that the cron job stores the outputs.
+
+bandit21@bandit:/etc/cron.d$ cat cronjob_bandit22
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+cat /usr/bin/cronjob_bandit22.sh
+#!/bin/bash
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff
+
+Level 22
+
+ssh bandit22@bandit.labs.overthewire.org -p 2220
+WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff
+
+in this level i learnt about;
+
+how to determine the user bu the use of whoami command
+
+variables and how to assign values to variables
+
+$mytarget and $myname where the two variables that was mentioned in this level.
+
+i assigned the value bandit23 to the variable $myname.
+bandit22@bandit:~$ myname=bandit23 and used echo command to validate it.
+
+with this i was able to get the value of $mytarget variable
+echo I am user $myname | md5sum | cut -d ' ' -f 1
+8ca319486bfbbc3663ea0fbe81326349
+
+i now used cat command to display the value stored at /tmp/$mytarget
+
+i also understood fully about he cron : the time based schedule enabler
+
+bandit22@bandit:~$ cat /tmp/8169b67bd894ddbb4412f91573b38db3
+QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
+
+
+Level 23
+ssh bandit23@bandit.labs.overthewire.org -p 2220
+QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G
+
+i learnt how to use vim to create a bash script.
+insert: to write in vim
+esc: then :wq to save and exit
+shebang : tells the shell what program to execute
+#! /bin/sh : executes the file using sh
+
+bandit23@bandit:/tmp$ cd ikemtest
+bandit23@bandit:/tmp/ikemtest$ ls
+pass  test.sh
+bandit23@bandit:/tmp/ikemtest$ cp test.sh /var/spool/bandit24/foo
+bandit23@bandit:/tmp/ikemtest$ ls -alps
+total 10564
+    4 drwxrwxr-x    2 bandit23 bandit23     4096 Oct  3 02:17 ./
+10556 drwxrwx-wt 2853 root     root     10801152 Oct  3 02:34 ../
+    0 -rwxrwxrwx    1 bandit23 bandit23        0 Oct  3 02:17 pass
+    4 -rwxrwxrwx    1 bandit23 bandit23       64 Oct  3 02:17 test.sh
+bandit23@bandit:/tmp/ikemtest$ cat pass
+bandit23@bandit:/tmp/ikemtest$ cat pass
+bandit23@bandit:/tmp/ikemtest$ cat pass
+VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar
+
+
+Level24
+ssh bandit24@bandit.labs.overthewire.org -p 2220
+
+VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar
+
+A brute force attack is a hacking method that tries to guess passwords, encryption keys, or hidden web pages by trying many possible combinations.
+
+learnt how to write a brute force script and run it using ./<file.sh>. i used vim editor to write and save the script.
+
+#!/bin/bash
+
+bandit24=VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar
+
+for pin in {0000..9999}; do
+        echo "$bandit24 $pin"
+done | nc localhost 30002
+
+
+p7TaowMYrmu23Ol8hiZh9UvD0O9hpx8d
+
+
+
+
+level 25
+
+ssh bandit25@bandit.labs.overthewire.org -p 2220
+p7TaowMYrmu23Ol8hiZh9UvD0O9hpx8d
+
+i learnt how to use envoke vim to edit the bash script of 
+
+bandit25@bandit:~$ cat /etc/passwd | grep bandit26
+bandit26:x:11026:11026:bandit level 26:/home/bandit26:/usr/bin/showtext
+bandit25@bandit:~$ cat /usr/bin/showtext
+#!/bin/sh
+
+export TERM=linux
+
+more ~/text.txt
+exit 0
+
+in vim 
+
+:r /etc/bandit_pass/bandit26
+
+c7GvcKlw9mC7aUQaPx7nwFstuAIBw1o1
+
+
+Level 26
+
+ssh bandit25@bandit.labs.overthewire.org -p 2220
+c7GvcKlw9mC7aUQaPx7nwFstuAIBw1o1
+
+we have to set the shell from bandit25
+by using the following set of command
+
+:set shell=/bin/bash to reset our shell
+then 
+:shell
+bandit26@bandit:~$ whoami
+bandit26
+bandit26@bandit:~$ ls
+bandit27-do  text.txt
+bandit26@bandit:~$ ./bandit27-do
+Run a command as another user.
+  Example: ./bandit27-do id
+bandit26@bandit:~$ ./bandit27-do cat /etc/bandit_pass/bandit27
+YnQpBuifNMas1hcUFk70ZmqkhUU2EuaS
+
+in this level, i learnt about how to use shell
+
+
+Level 27
+ssh bandit27@bandit.labs.overthewire.org -p 2220
+
+YnQpBuifNMas1hcUFk70ZmqkhUU2EuaS
+
+
+i learnt how to clone a repo using ssh command.
+i created a directory in /tmp
+It is pertinent to know that the port has to be specified to enable the clone, otherwise it would produce an error.
+
+ git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo
+
+here port 2220 is specified so not to default to 22.
+bandit27@bandit:/tmp/ikemgit/repo$ cat README
+The password to the next level is: AVanL161y9rsbcJIsFHuw35rjaOM19nR
+
+
+Level 28
+ssh bandit28@bandit.labs.overthewire.org -p 2220
+
+AVanL161y9rsbcJIsFHuw35rjaOM19nR
+
+
+i created my temp directory where i cloned the repo via port 2220
+
+bandit28@bandit:/tmp/ikemtest2$ git clone ssh://bandit28-git@localhost:2220/home/bandit28-git/repo
+
+the readme file contains a password that is hashed/not update
+
+i learnt how to lookup commits history in git and how to use checkout command to restore working tree files.
+
+git log : displays history of commit
+git checkout <commit number> : restore the working tree file
+
+## credentials
+
+- username: bandit29
+- password: tQKvmcwNYcFS6vmPHIUSI3ShmsrQZK8S
+
+Level 29
+ssh bandit29@bandit.labs.overthewire.org -p 2220
+
+tQKvmcwNYcFS6vmPHIUSI3ShmsrQZK8S
+
+
+i leant how to
+display branches(remote) with git branch -r 
+switch branches with git checkout <branch name>
+
+switching branch to dev enabled the credentials to be visible by using 
+cat README.md
+
+## credentials
+
+- username: bandit30
+- password: xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
+
+
+Level 30
+ssh bandit30@bandit.labs.overthewire.org -p 2220
+
+xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
+
+login to the repo , the readme file is empty.
+
+i used git tag to identify if there was any tags. there is a tag known as secret.
+
+git tag
+git show secret ("secret" is the name of the tag that is to show)
+
+OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
+
+Level 31
+ssh bandit31@bandit.labs.overthewire.org -p 2220
+
+OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
+
+learnt how to
+
+check the .ignore file in the repo
+remove file in repo using rm command
+add a file to the repo using git add <file>
+commit a change using git commit -m"<message>"
+push changes/commit to remote repo using git push
+
+emote: Well done! Here is the password for the next level:
+remote: rmCBvG56y58BXzv98yZGdO7ATVL5dW8y
+
+
+Level 32
+ssh bandit32@bandit.labs.overthewire.org -p 2220
+rmCBvG56y58BXzv98yZGdO7ATVL5dW8y
+
+
+positional parameters
+
+WELCOME TO THE UPPERCASE SHELL
+>> ls
+sh: 1: LS: Permission denied
+>> pwd
+sh: 1: PWD: Permission denied
+>> $SHELL
+WELCOME TO THE UPPERCASE SHELL
+>> $0
+$ export SHELL=/bin/bash
+$ echo $SHELL
+/bin/bash
+$ $SHELL
+bandit33@bandit:~$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
